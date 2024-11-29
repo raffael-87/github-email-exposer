@@ -1,8 +1,9 @@
 import { getUsernames, cleanRawUserData } from "../utils/handleUserData";
+import { toast, Toaster } from "react-hot-toast";
 
 interface GithubData {
   name: string;
-  email:string;
+  email: string;
 }
 
 interface DataTableProps {
@@ -14,22 +15,24 @@ function DataTable({ githubData }: DataTableProps) {
   const finalUserData = cleanRawUserData(userData);
 
   const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        alert(`Copied: ${text}`);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-      });
+    try {
+      navigator.clipboard.writeText(text);
+      toast.success(`${text} successfully copied to clipboard`);
+    } catch (err) {
+      toast.error(`Error: Could not copy ${text} to clipboard`);
+      console.error("Failed to copy: ", err);
+    }
   };
 
   return (
     <div>
+      <Toaster />
       <table className="mx-auto text-xs sm:text-sm w-[75%] border-collapse border border-gray-300">
         <thead>
           <tr>
-            <th className="px-4 py-2 border border-gray-300">Github Profile Name</th>
+            <th className="px-4 py-2 border border-gray-300">
+              Github Profile Name
+            </th>
             <th className="px-4 py-2 border border-gray-300">E-Mail Address</th>
           </tr>
         </thead>
