@@ -3,9 +3,14 @@ import { ChangeEvent } from "react";
 type IntroProps = {
   username: string;
   setUsername: (username: string) => void;
+  APIRequestCounter: number;
 };
 
-export default function Intro({ username, setUsername }: IntroProps) {
+export default function Intro({
+  username,
+  setUsername,
+  APIRequestCounter,
+}: IntroProps) {
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     setUsername(e.target.value);
   }
@@ -39,6 +44,7 @@ export default function Intro({ username, setUsername }: IntroProps) {
           type="text"
           value={username}
           onChange={handleInputChange}
+          disabled={APIRequestCounter <= 0}
           aria-label="GitHub username"
         />
       </p>

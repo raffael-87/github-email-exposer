@@ -7,7 +7,6 @@
 - Fehlermeldung wenn Account gefunden, aber Email versteckt
 - Fehlermeldung, wenn kein Account gefunden
 - Fehlermeldung, wenn API nicht erreichbar
-- Wenn ich die Email-Adresse anklicke, öffnet sich das Mailprogramm
 */
 
 // import githubData from "./data/dummy_data.json";
@@ -20,13 +19,16 @@ import { fetchGithubData } from "./services/apiGithub";
 
 function App() {
   const [githubData, setGithubData] = useState<GithubData | null>(null);
-  const [username, setUsername] = useState<string>("dabeaz");
+  const [username, setUsername] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [APIRequestCounter, setAPIRequestCounter] = useState<number>(5);
 
   useEffect(() => {
     if (username) {
       fetchData();
+      setAPIRequestCounter((prevCount) => prevCount - 1);
+      console.log(`API requests left: ${APIRequestCounter}`);
     }
   }, [username]);
 
@@ -47,7 +49,11 @@ function App() {
   return (
     <div className="flex flex-col w-full h-screen pt-12 mx-auto md:w-3/4 lg:w-1/2 bg-backgroundDark text-fontColorBright">
       <main>
-        <Intro username={username} setUsername={setUsername} />
+        <Intro
+          username={username}
+          setUsername={setUsername}
+          APIRequestCounter={APIRequestCounter}
+        />
       </main>
 
       <div className="flex-grow mt-5 mx-7">
