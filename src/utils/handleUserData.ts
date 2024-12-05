@@ -8,17 +8,45 @@ export function getUsernames(fetchedData: unknown): Author[] {
 
   if (Array.isArray(fetchedData)) {
     for (const elem of fetchedData) {
-      authors = authors.concat(getUsernames(elem)); // Hier nutzen wir Rekursion 🙂
+      authors = authors.concat(getUsernames(elem)); // Recursive call for arrays
     }
   } else if (typeof fetchedData === "object" && fetchedData !== null) {
     for (const key in fetchedData) {
-      if (key === "author") {
-        authors.push((fetchedData as Record<string, string>)[key]);
-      } else if (typeof (fetchedData as Record<string, string>)[key] === "object") {
-        authors = authors.concat(getUsernames((fetchedData as Record<string, string>)[key])); // Hier nutzen wir nochmal Rekursion 🙂
+      const value = (fetchedData as Record<string, unknown>)[key];
+
+      // Check for 'commits' array in the new structure
+      if (key === "commits" && Array.isArray(value)) {
+        for (const commit of value) {
+          const author = (commit as Record<string, unknown>).author;
+          if (author && typeof author === "object") {
+            const name = (author as Record<string, string>).name;
+            const email = (author as Record<string, string>).email;
+
+            if (name && email) {
+              authors.push({ name, email });
+            }
+          }
+        }
+      }
+
+      // Check for 'author' in the old structure
+      if (key === "author" && typeof value === "object") {
+        const name = (value as Record<string, string>).name;
+        const email = (value as Record<string, string>).email;
+
+        if (name && email) {
+          authors.push({ name, email });
+        }
+      }
+
+      // Continue traversing other objects recursively
+      if (typeof value === "object" && value !== null) {
+        authors = authors.concat(getUsernames(value));
       }
     }
   }
+  console.log(authors);
+
   return authors;
 }
 

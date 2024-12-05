@@ -1,23 +1,16 @@
-import { getUsernames, cleanRawUserData } from "../utils/handleUserData";
+import React from "react";
 import { toast, Toaster } from "react-hot-toast";
 
-interface GithubData {
-  name: string;
-  email: string;
-}
-
 interface DataTableProps {
-  githubData: GithubData[];
+  githubData: Record<string, string>;
 }
 
 function DataTable({ githubData }: DataTableProps) {
-  const userData = getUsernames(githubData);
-  const finalUserData = cleanRawUserData(userData);
-
-  const handleCopyToClipboard = (text: string) => {
+  const handleCopyToClipboard = (text: string, e: React.MouseEvent) => {
+    e.preventDefault();
     try {
       navigator.clipboard.writeText(text);
-      toast.success(`${text} successfully copied to clipboard`);
+      toast.success(`${text}\n successfully copied to clipboard`);
     } catch (err) {
       toast.error(`Error: Could not copy ${text} to clipboard`);
       console.error("Failed to copy: ", err);
@@ -25,24 +18,26 @@ function DataTable({ githubData }: DataTableProps) {
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
       <Toaster />
-      <table className="mx-auto text-xs sm:text-sm w-[75%] border-collapse border border-gray-300">
+      <table className="w-full text-sm border-collapse">
         <thead>
           <tr>
-            <th className="px-4 py-2 border border-gray-300">
-              Github Profile Name
+            <th className="p-2 border border-gray-300 bg-stone-950">
+              Profile Name
             </th>
-            <th className="px-4 py-2 border border-gray-300">E-Mail Address</th>
+            <th className="p-2 border border-gray-300 bg-stone-950">
+              Email Address
+            </th>
           </tr>
         </thead>
         <tbody>
-          {Object.entries(finalUserData).map(([email, name], index) => (
+          {Object.entries(githubData).map(([email, name], index) => (
             <tr key={index}>
-              <td className="px-4 py-2 border border-gray-300">{name}</td>
+              <td className="p-2 break-words border border-gray-300">{name}</td>
               <td
-                className="px-4 py-2 border border-gray-300 cursor-pointer hover:bg-gray-100"
-                onClick={() => handleCopyToClipboard(email)}
+                className="p-2 break-all border border-gray-300 cursor-pointer select-none hover:bg-gray-800"
+                onClick={(e) => handleCopyToClipboard(email, e)}
               >
                 {email}
               </td>

@@ -2,13 +2,13 @@
 
 ## Description
 
-GitHub E-Mail Exposer is a web application that allows you to find all e-mail addresses associated with a certain GitHub account. It retrieves event data from GitHub's public API to expose email addresses that are not explicitly hidden by users. These email adresses are public anyway, so nothing illegal is happening here 😎
+GitHub E-Mail Exposer is a web application that allows you to find all e-mail addresses associated with a certain GitHub account. It retrieves event data from GitHub's public API to expose e-mail addresses that are not explicitly hidden by users. These e-mail adresses are public anyway, so nothing illegal is happening here 😎
 
 ## Features
 
 - Search for GitHub users by username
-- Display email addresses of the searched user and their collaborators
-- Copy email addresses to clipboard with a single click
+- Display e-mail addresses of the searched user and their collaborators
+- Copy e-mail addresses to clipboard with a single click
 - Responsive design for various screen sizes
 - 60 requests per hour for free
 
