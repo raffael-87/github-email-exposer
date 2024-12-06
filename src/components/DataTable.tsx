@@ -7,11 +7,11 @@ interface DataTableProps {
 }
 
 function DataTable({ githubData }: DataTableProps) {
-  const handleCopyToClipboard = (text: string, e: React.MouseEvent) => {
+  const handleCopyToClipboard = async (text: string, e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      navigator.clipboard.writeText(text);
-      toast.success(`${text}\n successfully copied to clipboard`);
+      await navigator.clipboard.writeText(text);
+      toast.success(`${text} successfully copied to clipboard`);
     } catch (err) {
       toast.error(`Error: Could not copy ${text} to clipboard`);
       console.error("Failed to copy: ", err);
@@ -24,12 +24,8 @@ function DataTable({ githubData }: DataTableProps) {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr>
-            <th className="p-2 border border-gray-300 bg-stone-950">
-              Full Name
-            </th>
-            <th className="p-2 border border-gray-300 bg-stone-950">
-              Email Address
-            </th>
+            <th className="p-2 border border-gray-300 bg-stone-950">Full Name</th>
+            <th className="p-2 border border-gray-300 bg-stone-950">Email Address</th>
           </tr>
         </thead>
         <tbody>

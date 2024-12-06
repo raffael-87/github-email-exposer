@@ -8,7 +8,7 @@ export async function fetchData(
   >,
   setError: React.Dispatch<React.SetStateAction<string | null>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setMaxAPIRequestCounter: React.Dispatch<React.SetStateAction<number>>
+  setRateLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>
 ): Promise<void> {
   if (!inputUsername) {
     setGithubData(null);
@@ -33,17 +33,33 @@ export async function fetchData(
     } else {
       setGithubData(cleanedData);
     }
-
-    setMaxAPIRequestCounter((prevCount) => prevCount - 1);
+    setRateLimitExceeded(false);
   } catch (error) {
-    if (error instanceof Error && error.message === "USER_NOT_FOUND") {
-      setError(`User "${inputUsername}" could not be found.`);
-    } else {
-      setError(`User "${inputUsername}" does not exist.`);
-    }
-    console.error("Error fetching data: ", error);
+    handleFetchError(error, inputUsername, setError, setRateLimitExceeded);
     setGithubData(null);
   } finally {
     setIsLoading(false);
   }
+}
+
+function handleFetchError(
+  error: unknown,
+  username: string,
+  setError: React.Dispatch<React.SetStateAction<string | null>>,
+  setRateLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  if (error instanceof Error) {
+    switch (error.message) {
+      case "USER_NOT_FOUND":
+        setError(`User "${username}" could not be found.`);
+        break;
+      case "RATE_LIMIT_EXCEEDED":
+        setError("Too many API requests. Only 60 requests per hour are allowed. Come back later.");
+        setRateLimitExceeded(true);
+        break;
+      default:
+        setError(`An unexpected error occurred.`);
+    }
+  }
+  console.error("Error fetching data: ", error);
 }

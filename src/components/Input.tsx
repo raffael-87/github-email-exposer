@@ -3,13 +3,13 @@ import { ChangeEvent, useRef, useEffect } from "react";
 type InputProps = {
   username: string;
   setUsername: (username: string) => void;
-  APIRequestCounter: number;
+  disabled: boolean;
 };
 
 export default function Input({
   username,
   setUsername,
-  APIRequestCounter,
+  disabled,
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,18 +32,17 @@ export default function Input({
         <span className="mr-1 text-sm">https://github.com/</span>
         <input
           id="github-username"
-          className="flex-grow w-1/2 p-2 text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className={`flex-grow w-1/2 p-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
+            disabled ? "bg-gray-900 text-gray-400 cursor-not-allowed" : "bg-white text-gray-900"
+          }`}
           type="text"
           value={username}
           onChange={handleInputChange}
           ref={inputRef}
-          disabled={APIRequestCounter <= 0}
+          disabled={disabled}
           placeholder="username"
         />
       </div>
-      {APIRequestCounter <= 0 && (
-        <p className="mt-2 text-sm text-red-500">Out of API requests</p>
-      )}
     </div>
   );
 }

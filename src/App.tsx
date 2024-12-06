@@ -1,10 +1,3 @@
-// TODOS:
-/*
-- Fehlermeldung, wenn Anzahl der API Requests pro h erreicht ist (vielleicht mit Counter von 60 runter?)
-  ° Input field dann deaktivieren
-- Jede Zeile der Ergebnisse klickbarer Link zum jeweiligen Profil im neuen browser
-- Fehlermeldung, wenn API nicht erreichbar
-*/
 import { useState, useEffect } from "react";
 
 import Input from "./components/Input";
@@ -22,8 +15,7 @@ function App() {
   const [username, setUsername] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [MaxAPIRequestsCounter, setMaxAPIRequestsCounter] =
-    useState<number>(60);
+  const [rateLimitExceeded, setRateLimitExceeded] = useState<boolean>(false);
 
   useEffect(() => {
     const debouncedFetchData = debounce((inputUsername: string) => {
@@ -32,7 +24,7 @@ function App() {
         setGithubData,
         setError,
         setIsLoading,
-        setMaxAPIRequestsCounter
+        setRateLimitExceeded
       );
     }, 300);
 
@@ -71,12 +63,12 @@ function App() {
         <Input
           username={username}
           setUsername={setUsername}
-          MaxAPIRequestsCounter={MaxAPIRequestsCounter}
+          disabled={rateLimitExceeded}
         />
 
         <div className="mt-8">
           {isLoading && <p className="text-center">Loading...</p>}
-          {error && <p className="text-center">{error}</p>}
+          {error && <p className="text-center text-red-400">{error}</p>}
           {githubData && <DataTable githubData={githubData} />}
         </div>
       </main>
