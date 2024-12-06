@@ -24,7 +24,7 @@ function DataTable({ githubData }: DataTableProps) {
         <thead>
           <tr>
             <th className="p-2 border border-gray-300 bg-stone-950">
-              Profile Name
+              Full Name
             </th>
             <th className="p-2 border border-gray-300 bg-stone-950">
               Email Address
@@ -38,6 +38,7 @@ function DataTable({ githubData }: DataTableProps) {
               <td
                 className="p-2 break-all border border-gray-300 cursor-pointer select-none hover:bg-gray-800"
                 onClick={(e) => handleCopyToClipboard(email, e)}
+                title="Click to copy to clipboard"
               >
                 {email}
               </td>

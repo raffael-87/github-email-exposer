@@ -45,7 +45,6 @@ export function getUsernames(fetchedData: unknown): Author[] {
       }
     }
   }
-  console.log(authors);
 
   return authors;
 }
