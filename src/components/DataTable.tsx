@@ -1,5 +1,6 @@
 import React from "react";
 import { toast, Toaster } from "react-hot-toast";
+import ScrollToTop from "./ScrollToTop";
 
 interface DataTableProps {
   githubData: Record<string, string>;
@@ -46,6 +47,7 @@ function DataTable({ githubData }: DataTableProps) {
           ))}
         </tbody>
       </table>
+      <ScrollToTop />
     </div>
   );
 }
