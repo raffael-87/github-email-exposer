@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import spyIcon from "./data/favicon/spy.png";
 
 import Paragraph from "./components/Paragraph";
 import Input from "./components/Input";
@@ -38,9 +39,13 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-backgroundDark text-fontColorBright">
       <main className="flex-grow w-full max-w-3xl px-4 py-8 mx-auto">
-        <h1 className="mb-6 text-3xl font-bold text-center">
-          GitHub E-Mail Exposer
-        </h1>
+        <div className="flex items-center justify-center mb-6">
+          <img src={spyIcon} alt="Spy Icon" className="w-8 h-8 mr-3" />
+          <h1 className="text-3xl font-bold text-center">
+            GitHub E-Mail Exposer
+          </h1>
+          <img src={spyIcon} alt="Spy Icon" className="w-8 h-8 ml-3 md:hidden" />
+        </div>
         <Paragraph>
           Unfortunately (or perhaps fortunately?), GitHub does not provide a way
           to contact other users directly unless they have chosen to display
