@@ -54,11 +54,13 @@ function handleFetchError(
         setError(`User "${username}" could not be found.`);
         break;
       case "RATE_LIMIT_EXCEEDED":
-        setError("Too many API requests. Only 60 requests per hour are allowed. Come back later.");
+        setError(
+          "Too many API requests. Only 60 requests per hour are allowed. Come back later."
+        );
         setRateLimitExceeded(true);
         break;
       default:
-        setError(`An unexpected error occurred.`);
+        setError("An unexpected error occurred.");
     }
   }
   console.error("Error fetching data: ", error);

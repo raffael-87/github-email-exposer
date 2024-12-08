@@ -1,14 +1,12 @@
-import React from "react";
 import { toast, Toaster } from "react-hot-toast";
-import ScrollToTop from "./ScrollToTop";
+import ScrollToTopButton from "./ScrollToTopButton";
 
 interface DataTableProps {
   githubData: Record<string, string>;
 }
 
 function DataTable({ githubData }: DataTableProps) {
-  const handleCopyToClipboard = async (text: string, e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleCopyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       toast.success(`${text} successfully copied to clipboard`);
@@ -34,7 +32,7 @@ function DataTable({ githubData }: DataTableProps) {
               <td className="p-2 break-words border border-gray-300">{name}</td>
               <td
                 className="p-2 break-all border border-gray-300 cursor-pointer select-none hover:bg-gray-800"
-                onClick={(e) => handleCopyToClipboard(email, e)}
+                onClick={() => handleCopyToClipboard(email)}
                 title="Click to copy to clipboard"
               >
                 {email}
@@ -43,7 +41,7 @@ function DataTable({ githubData }: DataTableProps) {
           ))}
         </tbody>
       </table>
-      <ScrollToTop />
+      <ScrollToTopButton />
     </div>
   );
 }

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
+import Paragraph from "./components/Paragraph";
 import Input from "./components/Input";
 import DataTable from "./components/DataTable";
 import Footer from "./components/Footer";
-import Paragraph from "./components/Paragraph";
 import { fetchData } from "./services/fetchData";
 
-import debounce from "lodash/debounce";
+import debounce from "lodash/debounce";  // we use debounce to prevent too many API requests
 
 function App() {
   const [githubData, setGithubData] = useState<Record<string, string> | null>(
@@ -26,7 +26,7 @@ function App() {
         setIsLoading,
         setRateLimitExceeded
       );
-    }, 300);
+    }, 300);  // trigger fetchData every 300ms after every keystroke, so we don't spam the API too much with our useEffect
 
     debouncedFetchData(username);
 

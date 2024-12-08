@@ -1,21 +1,12 @@
-import { useState, useEffect } from "react";
+import { useScrollToTop } from "../hooks/useScrollToTop";
 
-const ScrollToTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setIsVisible(window.scrollY > 300);
-
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+const ScrollToTopButton = () => {
+  const { isVisible, scrollToTop } = useScrollToTop();
 
   return (
     isVisible && (
       <button
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        onClick={scrollToTop}
         className="fixed p-2 text-white transition-all duration-300 rounded-full shadow-lg bottom-4 right-4 bg-stone-800 hover:bg-stone-700"
         aria-label="Scroll to top"
       >
@@ -38,4 +29,4 @@ const ScrollToTop = () => {
   );
 };
 
-export default ScrollToTop;
+export default ScrollToTopButton; 
