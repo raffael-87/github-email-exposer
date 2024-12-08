@@ -39,10 +39,10 @@ function App() {
     <div className="flex flex-col min-h-screen bg-backgroundDark text-fontColorBright">
       <main className="flex-grow w-full max-w-3xl px-4 py-8 mx-auto">
         <h1 className="mb-6 text-3xl font-bold text-center">
-          Github E-Mail Exposer
+          GitHub E-Mail Exposer
         </h1>
         <Paragraph>
-          Unfortunately (or perhaps fortunately?), Github does not provide a way
+          Unfortunately (or perhaps fortunately?), GitHub does not provide a way
           to contact other users directly unless they have chosen to display
           their email address on their profile.
         </Paragraph>

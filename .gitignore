@@ -21,3 +21,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+src/data/dummy_data_1.json
+src/data/dummy_data_2.json
