@@ -6,11 +6,7 @@ type InputProps = {
   disabled: boolean;
 };
 
-export default function Input({
-  username,
-  setUsername,
-  disabled,
-}: InputProps) {
+export default function Input({ username, setUsername, disabled }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -29,9 +25,13 @@ export default function Input({
       <div className="flex items-center w-full max-w-md">
         <span className="mr-1 text-sm">https://github.com/</span>
         <input
+          name="custom-field"
+          autoComplete="off"
           id="github-username"
           className={`flex-grow w-1/2 p-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
-            disabled ? "bg-gray-900 text-gray-400 cursor-not-allowed" : "bg-white text-gray-900"
+            disabled
+              ? "bg-gray-900 text-gray-400 cursor-not-allowed"
+              : "bg-white text-gray-900"
           }`}
           type="text"
           value={username}
