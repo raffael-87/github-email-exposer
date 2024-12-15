@@ -1,6 +1,6 @@
 const API_BASE_URL = "https://api.github.com";
 
-export async function fetchGithubData(username: string): Promise<any> {
+async function fetchGithubData(username: string): Promise<unknown> {
   const response = await fetch(
     `${API_BASE_URL}/users/${username}/events/public`
   );
@@ -15,3 +15,5 @@ export async function fetchGithubData(username: string): Promise<any> {
   }
   return await response.json();
 }
+
+export default fetchGithubData;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export function useScrollToTop() {
+function useScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -20,4 +20,6 @@ export function useScrollToTop() {
   };
 
   return { isVisible, scrollToTop };
-} 
+}
+
+export default useScrollToTop;

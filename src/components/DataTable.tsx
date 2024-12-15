@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import ScrollToTopButton from "./ScrollToTopButton";
 
@@ -6,7 +7,7 @@ interface DataTableProps {
 }
 
 function DataTable({ githubData }: DataTableProps) {
-  const handleCopyToClipboard = async (text: string) => {
+  const handleCopyToClipboard = useCallback(async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       toast.success(`${text} successfully copied to clipboard`);
@@ -14,7 +15,7 @@ function DataTable({ githubData }: DataTableProps) {
       toast.error(`Error: Could not copy ${text} to clipboard`);
       console.error("Failed to copy: ", err);
     }
-  };
+  }, []);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -22,8 +23,12 @@ function DataTable({ githubData }: DataTableProps) {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr>
-            <th className="p-2 border border-gray-300 bg-stone-950">Full Name</th>
-            <th className="p-2 border border-gray-300 bg-stone-950">Email Address</th>
+            <th className="p-2 border border-gray-300 bg-stone-950">
+              Full Name
+            </th>
+            <th className="p-2 border border-gray-300 bg-stone-950">
+              Email Address
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -46,4 +51,4 @@ function DataTable({ githubData }: DataTableProps) {
   );
 }
 
-export default DataTable;
+export default memo(DataTable);

@@ -1,7 +1,7 @@
-import { fetchGithubData } from "./apiGithub";
+import fetchGithubData from "./apiGithub";
 import { getUsernames, cleanRawUserData } from "../utils/handleUserData";
 
-export async function fetchData(
+async function fetchData(
   inputUsername: string,
   setGithubData: React.Dispatch<
     React.SetStateAction<Record<string, string> | null>
@@ -61,7 +61,9 @@ function handleFetchError(
         break;
       default:
         setError("An unexpected error occurred.");
+        console.error("Error fetching data: ", error);
     }
   }
-  console.error("Error fetching data: ", error);
 }
+
+export default fetchData;

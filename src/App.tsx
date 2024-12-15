@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import spyIcon from "./data/favicon/spy.png";
 
 import Paragraph from "./components/Paragraph";
 import Input from "./components/Input";
 import DataTable from "./components/DataTable";
 import Footer from "./components/Footer";
-import { fetchData } from "./services/fetchData";
+import fetchData from "./services/fetchData";
 
 import debounce from "lodash/debounce";  // we use debounce to prevent too many API requests
 
@@ -18,23 +18,24 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [rateLimitExceeded, setRateLimitExceeded] = useState<boolean>(false);
 
+  const debouncedFetchData = useMemo(
+    () =>
+      debounce((inputUsername: string) => {
+        fetchData(
+          inputUsername,
+          setGithubData,
+          setError,
+          setIsLoading,
+          setRateLimitExceeded
+        );
+      }, 300),  // trigger fetchData every 300ms after every keystroke, so we don't spam the API too much with our useEffect
+    []  // Dependency array kept empty, because we only want to create this once (on mount)
+  );
+
   useEffect(() => {
-    const debouncedFetchData = debounce((inputUsername: string) => {
-      fetchData(
-        inputUsername,
-        setGithubData,
-        setError,
-        setIsLoading,
-        setRateLimitExceeded
-      );
-    }, 300);  // trigger fetchData every 300ms after every keystroke, so we don't spam the API too much with our useEffect
-
     debouncedFetchData(username);
-
-    return () => {
-      debouncedFetchData.cancel();
-    };
-  }, [username]);
+    return () => debouncedFetchData.cancel();
+  }, [username, debouncedFetchData]);
 
   return (
     <div className="flex flex-col min-h-screen bg-backgroundDark text-fontColorBright">
@@ -70,7 +71,6 @@ function App() {
           setUsername={setUsername}
           disabled={rateLimitExceeded}
         />
-
         <div className="mt-8">
           {isLoading && <p className="text-center">Loading...</p>}
           {error && <p className="text-center text-red-400">{error}</p>}

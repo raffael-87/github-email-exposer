@@ -3,7 +3,7 @@ export interface Author {
   email: string;
 }
 
-export function getUsernames(fetchedData: unknown): Author[] {
+function getUsernames(fetchedData: unknown): Author[] {
   let authors: Author[] = [];
 
   if (Array.isArray(fetchedData)) {
@@ -46,7 +46,7 @@ export function getUsernames(fetchedData: unknown): Author[] {
   return authors;
 }
 
-export function cleanRawUserData(authors: Author[]): Record<string, string> {
+function cleanRawUserData(authors: Author[]): Record<string, string> {
   const authorsDict: Record<string, string> = {};
 
   authors.forEach((author) => {
@@ -61,3 +61,5 @@ export function cleanRawUserData(authors: Author[]): Record<string, string> {
 
   return authorsDict;
 }
+
+export { getUsernames, cleanRawUserData };

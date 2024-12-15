@@ -1,6 +1,6 @@
-import { useScrollToTop } from "../hooks/useScrollToTop";
+import useScrollToTop from "../hooks/useScrollToTop";
 
-const ScrollToTopButton = () => {
+function ScrollToTopButton() {
   const { isVisible, scrollToTop } = useScrollToTop();
 
   return (
@@ -27,6 +27,6 @@ const ScrollToTopButton = () => {
       </button>
     )
   );
-};
+}
 
 export default ScrollToTopButton; 

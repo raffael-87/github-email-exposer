@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useEffect } from "react";
+import { ChangeEvent, useRef, useEffect, memo, useCallback } from "react";
 
 type InputProps = {
   username: string;
@@ -6,16 +6,23 @@ type InputProps = {
   disabled: boolean;
 };
 
-export default function Input({ username, setUsername, disabled }: InputProps) {
+const Input = memo(function Input({
+  username,
+  setUsername,
+  disabled,
+}: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-    setUsername(e.target.value);
-  }
+  const handleInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setUsername(e.target.value);
+    },
+    [setUsername]
+  );
 
   return (
     <div className="flex flex-col items-center mt-6">
@@ -43,4 +50,6 @@ export default function Input({ username, setUsername, disabled }: InputProps) {
       </div>
     </div>
   );
-}
+});
+
+export default Input;
