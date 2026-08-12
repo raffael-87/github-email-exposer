@@ -10,7 +10,7 @@ GitHub E-Mail Exposer is a web application that allows you to find all e-mail ad
 - Display e-mail addresses of the searched user and their collaborators
 - Copy e-mail addresses to clipboard with a single click
 - Responsive design for various screen sizes
-- Free to use, within GitHub's limit of 60 unauthenticated requests per hour
+- Free to use, within GitHub's limit of 60 unauthenticated requests per hour. However, one username search can cost multiple requests at the moment. If you have an idea how to fix that, feel free to do so and open a pull request 😎
 
 ## How the addresses are found
 
@@ -39,7 +39,13 @@ to keep a lookup within the hourly limit.
 - Tailwind CSS
 - Vite
 
-I might add unit tests with Vitest on a later stage.
+~~I might add unit tests with Vitest on a later stage.~~ Done ✅
+
+## Tests
+
+Start the tests with `npm test` or `npm run test:watch`.
+
+There is one smoke test, that one doesn't succeed of course when the 1 hour contingent is used up. Run it with `npm run test:live`.
 
 ## Prerequisites
 
@@ -53,6 +59,7 @@ Before you begin, ensure you have met the following requirements:
 1. Clone the repository: `git clone https://github.com/raffael-87/github-email-exposer.git`
 2. Navigate to the project directory: `cd github-email-exposer`
 3. Install the dependencies: `npm install`
+
 ## Running the Application
 
 To run the application in development mode: `npm run dev`

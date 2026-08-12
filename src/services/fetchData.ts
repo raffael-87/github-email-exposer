@@ -72,7 +72,7 @@ function handleFetchError(
         break;
       case "RATE_LIMIT_EXCEEDED":
         setError(
-          "Too many API requests. GitHub allows 60 unauthenticated requests per hour and one search uses several of them. Come back later."
+          "Too many API requests. GitHub allows 60 unauthenticated requests per hour and one search uses several of them. Come back later or use a different ip address."
         );
         setRateLimitExceeded(true);
         break;

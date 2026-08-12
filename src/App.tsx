@@ -49,7 +49,7 @@ function App() {
         </div>
         <Paragraph>
           Unfortunately (or perhaps fortunately?), GitHub does not provide a way
-          to contact other users directly unless they have chosen to display
+          to contact other users directly, unless they have chosen to display
           their email address on their profile.
         </Paragraph>
         <Paragraph>
