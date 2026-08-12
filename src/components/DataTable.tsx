@@ -10,7 +10,7 @@ function DataTable({ githubData }: DataTableProps) {
   const handleCopyToClipboard = useCallback(async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success(`${text} successfully copied to clipboard`);
+      toast.success(`${text} \nsuccessfully copied to clipboard`);
     } catch (err) {
       toast.error(`Error: Could not copy ${text} to clipboard`);
       console.error("Failed to copy: ", err);
@@ -20,13 +20,13 @@ function DataTable({ githubData }: DataTableProps) {
   return (
     <div className="w-full overflow-x-auto">
       <Toaster />
-      <table className="w-full text-sm border-collapse">
+      <table className="w-full text-sm border-collapse" role="table">
         <thead>
           <tr>
-            <th className="p-2 border border-gray-300 bg-stone-950">
+            <th scope="col" className="p-2 border border-gray-300 bg-stone-950">
               Full Name
             </th>
-            <th className="p-2 border border-gray-300 bg-stone-950">
+            <th scope="col" className="p-2 border border-gray-300 bg-stone-950">
               Email Address
             </th>
           </tr>

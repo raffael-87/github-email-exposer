@@ -1,44 +1,32 @@
+import type { GithubUserData } from "../services/apiGithub";
+
 export interface Author {
   name: string;
   email: string;
 }
 
-function getUsernames(fetchedData: unknown): Author[] {
-  let authors: Author[] = [];
+// Addresses GitHub generates itself. They belong to nobody and are of no use here.
+const NOREPLY_PATTERNS = ["@users.noreply.github.com", "noreply@github.com"];
 
-  if (Array.isArray(fetchedData)) {
-    for (const elem of fetchedData) {
-      authors = authors.concat(getUsernames(elem));
-    }
-  } else if (typeof fetchedData === "object" && fetchedData !== null) {
-    for (const key in fetchedData) {
-      const value = (fetchedData as Record<string, unknown>)[key];
+// Every commit carries an author (who wrote the change) and a committer (who
+// applied it). The two can hold different addresses, so both are collected.
+function collectAuthors(data: GithubUserData): Author[] {
+  const authors: Author[] = [];
 
-      if (key === "commits" && Array.isArray(value)) {
-        for (const commit of value) {
-          const author = (commit as Record<string, unknown>).author;
-          if (author && typeof author === "object") {
-            const name = (author as Record<string, string>).name;
-            const email = (author as Record<string, string>).email;
+  if (data.profileEmail) {
+    authors.push({
+      name: data.profileName ?? data.profileEmail,
+      email: data.profileEmail,
+    });
+  }
 
-            if (name && email) {
-              authors.push({ name, email });
-            }
-          }
-        }
-      }
+  for (const entry of data.commits) {
+    for (const person of [entry.commit?.author, entry.commit?.committer]) {
+      const name = person?.name;
+      const email = person?.email;
 
-      if (key === "author" && typeof value === "object") {
-        const name = (value as Record<string, string>).name;
-        const email = (value as Record<string, string>).email;
-
-        if (name && email) {
-          authors.push({ name, email });
-        }
-      }
-
-      if (typeof value === "object" && value !== null) {
-        authors = authors.concat(getUsernames(value));
+      if (name && email) {
+        authors.push({ name, email });
       }
     }
   }
@@ -54,7 +42,7 @@ function cleanRawUserData(authors: Author[]): Record<string, string> {
   });
 
   Object.keys(authorsDict).forEach((email) => {
-    if (email.includes("@users.noreply.github.com")) {
+    if (NOREPLY_PATTERNS.some((pattern) => email.includes(pattern))) {
       delete authorsDict[email];
     }
   });
@@ -62,4 +50,4 @@ function cleanRawUserData(authors: Author[]): Record<string, string> {
   return authorsDict;
 }
 
-export { getUsernames, cleanRawUserData };
+export { collectAuthors, cleanRawUserData };

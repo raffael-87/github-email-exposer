@@ -2,7 +2,7 @@
 
 ## Description
 
-GitHub E-Mail Exposer is a web application that allows you to find all e-mail addresses associated with a certain GitHub account. It retrieves event data from GitHub's public API to expose e-mail addresses that are not explicitly hidden by users. These e-mail adresses are public anyway, so nothing illegal is happening here 😎
+GitHub E-Mail Exposer is a web application that allows you to find all e-mail addresses associated with a certain GitHub account. It reads the public commit data of GitHub's API to expose e-mail addresses that are not explicitly hidden by users. These e-mail adresses are public anyway, so nothing illegal is happening here 😎
 
 ## Features
 
@@ -10,7 +10,27 @@ GitHub E-Mail Exposer is a web application that allows you to find all e-mail ad
 - Display e-mail addresses of the searched user and their collaborators
 - Copy e-mail addresses to clipboard with a single click
 - Responsive design for various screen sizes
-- 60 requests per hour for free
+- Free to use, within GitHub's limit of 60 unauthenticated requests per hour
+
+## How the addresses are found
+
+GitHub used to include the commit details, and with them the author e-mail
+addresses, in the public events of an account. That field has been removed from
+the API, so the addresses are now read from two other public sources:
+
+1. `GET /search/commits?q=author:<username>` for the commits the user has
+   authored anywhere on GitHub. This is where their own address shows up.
+2. `GET /repos/<owner>/<repo>/commits` for the most recently pushed
+   repositories of the user, which is where the addresses of their
+   collaborators show up.
+
+Addresses that GitHub generates itself, everything ending in
+`users.noreply.github.com` and the `noreply@github.com` of the web interface,
+are filtered out, because they belong to nobody.
+
+One lookup therefore costs several API requests instead of a single one. The
+number of repositories that get scanned is capped in `src/services/apiGithub.ts`
+to keep a lookup within the hourly limit.
 
 ## Tech Stack Used
 
@@ -61,7 +81,3 @@ Alternatively, see the GitHub documentation on [creating a pull request](https:/
 ## License
 
 This project is licensed under the MIT License.
-
-## Contact
-
-You can find and message me on LinkedIn, so I know who you are 🧐

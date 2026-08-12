@@ -1,5 +1,9 @@
 import fetchGithubData from "./apiGithub";
-import { getUsernames, cleanRawUserData } from "../utils/handleUserData";
+import { collectAuthors, cleanRawUserData } from "../utils/handleUserData";
+
+// One lookup now costs several API requests, so a search that has been replaced
+// by a newer one is cancelled instead of being paid for twice.
+let inFlight: AbortController | null = null;
 
 async function fetchData(
   inputUsername: string,
@@ -10,19 +14,25 @@ async function fetchData(
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setRateLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>
 ): Promise<void> {
+  inFlight?.abort();
+
   if (!inputUsername) {
+    inFlight = null;
     setGithubData(null);
     setError(null);
     setIsLoading(false);
     return;
   }
 
+  const controller = new AbortController();
+  inFlight = controller;
+
   setIsLoading(true);
   setError(null);
 
   try {
-    const data = await fetchGithubData(inputUsername);
-    const authors = getUsernames(data);
+    const data = await fetchGithubData(inputUsername, controller.signal);
+    const authors = collectAuthors(data);
     const cleanedData = cleanRawUserData(authors);
 
     if (Object.keys(cleanedData).length === 0) {
@@ -35,10 +45,17 @@ async function fetchData(
     }
     setRateLimitExceeded(false);
   } catch (error) {
+    // A cancelled search has already been replaced, so its result is dropped
+    // silently and the newer search keeps control of the loading state.
+    if (controller.signal.aborted) return;
+
     handleFetchError(error, inputUsername, setError, setRateLimitExceeded);
     setGithubData(null);
   } finally {
-    setIsLoading(false);
+    if (inFlight === controller) {
+      inFlight = null;
+      setIsLoading(false);
+    }
   }
 }
 
@@ -55,7 +72,7 @@ function handleFetchError(
         break;
       case "RATE_LIMIT_EXCEEDED":
         setError(
-          "Too many API requests. Only 60 requests per hour are allowed. Come back later."
+          "Too many API requests. GitHub allows 60 unauthenticated requests per hour and one search uses several of them. Come back later."
         );
         setRateLimitExceeded(true);
         break;
@@ -63,6 +80,9 @@ function handleFetchError(
         setError("An unexpected error occurred.");
         console.error("Error fetching data: ", error);
     }
+  } else {
+    setError("An unexpected error occurred.");
+    console.error("Error fetching data: ", error);
   }
 }
 
